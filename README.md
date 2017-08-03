@@ -14,7 +14,7 @@ I have create this piece of code just to know if was viable. It is just a concep
 
 5. Now ask for your friend to send you this message: `@HELP`
 
-6. Select any other chat (i.e. go say Hi to your mom). There's a bug here, the Bot will not answer your friend if his chat is active.
+6. Select any other chat (i.e. go say Hi to your mom). There's a bug here, the Bot will not answer if your friend chat is active.
 
 # FAQ
 
