@@ -31,7 +31,7 @@ Well, you're right: Whatsapp will ban you forever if they discovery you are runn
 I can't understand why Mark Zuckerberg still forbid Bots, he is the kind of guy who [loves to copy-cat](https://www.recode.net/2017/3/28/15079774/facebook-stories-snapchat-instagram-copy) all the good things in the Web, right? 
  Why not simply copy WeChat features? if you go to China, you will discover that you can pay all your bils using WeChat, including silly things like P2P payments or restaurants. Paper money is past.
 
-Elon Musk may be right, perhaps the little [Zuckberg is just being limited in this subject](https://twitter.com/elonmusk/status/889743782387761152), lol.
+Elon Musk may be right, perhaps the little Zuckberg [is just being limited in this subject](https://twitter.com/elonmusk/status/889743782387761152), lol.
 
 I can't guarantee that you are not getting banned in a long term using this Bot. I really don't think so, but I can't guarantee.
 
@@ -41,7 +41,7 @@ Hold on mate, there are kids here.
 
 First, [yowsup](https://github.com/tgalal/yowsup) is a great python library! Simply awesome.
 
-But their problem is: They connect to Whatsapp servers directly, without any middlware. So it is not so hard for whatsapp team create rules to ban you if you are using yowsup.
+But their problem is: They connect to Whatsapp servers directly, without any middlware. So it is not so hard for whatsapp team to create ban-rules you if you are using yowsup.
 
 I got banned many times in past, so I know, soon or later, you will get banned as well. Is just a matter of time.  You can see that I am probably right just looking [here](https://github.com/tgalal/yowsup/issues/1558), 
 [here](https://github.com/tgalal/yowsup/issues/1979), 
