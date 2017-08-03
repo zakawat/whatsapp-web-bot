@@ -68,7 +68,7 @@ Yes, there are.
 
 2. If your friend send `@HELP` message with his chat window opened, the Bot will not read this message. The Bot only reads messages with the unread-green-icon, so you have to get out of your friend window.
 
-Feel free to fix and PR it. I will probably not touch in this public repo any more.
+Feel free to fix and PR it. I will probably not touch in this public repo anymore.
 
 # -
 
