@@ -155,9 +155,5 @@
         })
     }
 
-    const processChat = (chats, chat) => {
-
-    }
-
     start()
 })()
