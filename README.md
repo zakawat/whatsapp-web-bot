@@ -64,7 +64,7 @@ A lot of limitations!
 
 Yes, there are.
 
-1. Your friend can't send `@HELP` followed of any another message really fast. This Bot only reads the last message. It's a buggy (that can be fixed)
+1. Your friend can't send `@HELP` followed of any other message really fast. This Bot only reads the last message. It's a buggy (that can be fixed)
 
 2. If your friend send `@HELP` message with his chat window opened, the Bot will not read this message. The Bot only reads messages with the unread-green-icon, so you have to get out of your friend window.
 
