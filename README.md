@@ -2,7 +2,7 @@
 
 This code is an example of Bot for Whatsapp Web.
 
-I have create this piece of code just to know if was possible viable. It is just a concept, just a test.
+I have create this piece of code just to know if was viable. It is just a concept, just a test.
 
 # How to use it?
 
