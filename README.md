@@ -1,10 +1,10 @@
-#What is
+# What is
 
 This code is an example of Bot for Whatsapp Web.
 
 I have create this piece of code just to know if was possible viable. It is just a concept, just a test.
 
-#How to use it?
+# How to use it?
 
 1. Open `chrome`, then visit `web.whatsapp.com`
 2. Press `F12`, click at `console`
@@ -16,7 +16,7 @@ I have create this piece of code just to know if was possible viable. It is just
 
 6. Select any other chat (i.e. go say Hi to your mom). There's a bug here, the Bot will not answer your friend if his chat is active.
 
-#FAQ
+# FAQ
 
 #### So it's possible to create a Bot in Whatsapp Web?
 
@@ -70,6 +70,6 @@ Yes, there are.
 
 Feel free to fix and PR it. I will probably not touch in this public repo any more.
 
-#-
+# -
 
 Author: Bruno Kilian | skype bruno.kilian
