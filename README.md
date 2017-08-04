@@ -1,4 +1,4 @@
-# What is
+# What is it
 
 This code is an example of Bot for Whatsapp Web.
 
