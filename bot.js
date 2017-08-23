@@ -62,7 +62,7 @@
 
         const loopFewTimes = () => {
             setTimeout(() => {
-                const titleMain = document.querySelector('h2.chat-title').innerText
+                const titleMain = document.querySelector('.chat-title').innerText
 
                 if (titleMain != title) {
                     console.log('not yet')
