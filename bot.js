@@ -83,12 +83,12 @@
         ignoreLastMsg[title] = message
 
         //add text into input field
-        document.querySelector('.input').innerHTML = message.replace(/  /gm,'')
+        document.querySelector('.pluggable-input-body').innerHTML = message.replace(/  /gm,'')
 
         //Force refresh
         event = document.createEvent("UIEvents");
         event.initUIEvent("input", true, true, window, 1)
-        document.querySelector('.input').dispatchEvent(event)
+        document.querySelector('.pluggable-input-body').dispatchEvent(event)
 
         //Click at Send Button
         eventFire(document.querySelector('.compose-btn-send'), 'click')
@@ -111,7 +111,7 @@
 
         // get infos
         const title = chat.querySelector('.emojitext').title + ''
-        const lastMsg = (chat.querySelector('.last-msg') || { innerText: '' }).innerText //.last-msg returns null when some user is typing a message to me
+        const lastMsg = (chat.querySelectorAll('.emojitext')[1] || { innerText: '' }).innerText //.last-msg returns null when some user is typing a message to me
 
         // avoid sending duplicate messaegs
         if ((ignoreLastMsg[title]) == lastMsg) {
