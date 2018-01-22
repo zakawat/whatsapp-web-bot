@@ -37,6 +37,19 @@
     function rand(high, low = 0) {
         return Math.floor(Math.random() * (high - low + 1) + low);
     }
+    
+    function getSelectedTitle(){
+		var chats = document.querySelectorAll('.chat-drag-cover');
+		var selectedTitle;
+		for (var i = 0; i < chats.length; i++){
+			if (chats[i]){
+				if (chats[i].querySelector('.active')){
+					selectedTitle = chats[i].querySelector('.emojitext').title;
+				}
+			}
+		}
+		return selectedTitle;
+	}
 
     // Call the main function again
     const goAgain = (fn, sec) => {
@@ -62,7 +75,7 @@
 
         const loopFewTimes = () => {
             setTimeout(() => {
-                const titleMain = document.querySelector('.chat-title').innerText
+                const titleMain = getSelectedTitle();
 
                 if (titleMain != title) {
                     console.log('not yet')
