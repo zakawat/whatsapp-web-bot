@@ -56,7 +56,7 @@
 		var messages = document.querySelectorAll('.msg');
 		var pos = messages.length-1;
 		
-		while (messages[pos] && messages[pos].classList.contains('msg-system')){
+		while (messages[pos] && (messages[pos].classList.contains('msg-system') || messages[pos].querySelector('.message-out'))){
 			pos--;
 			if (pos <= -1){
 				return false;
@@ -185,7 +185,7 @@
 
                 1. *@TIME*
                 2. *@JOKE*`
-		console.log('called3');
+		
         if (lastMsg.toUpperCase().indexOf('@TIME') > -1)
             sendText = `
                 Don't you have a clock, dude?
