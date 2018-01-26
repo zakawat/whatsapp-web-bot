@@ -3,7 +3,8 @@
     // GLOBAL VARS AND CONFIGS
     //
     //const whitelist = ['Fotos salvass', 'Teste ignore']
-    const ignoreLastMsg = {}
+    var lastMessageOnChat = false;
+    var ignoreLastMsg = {}
 
     const jokeList = [
         `
@@ -50,6 +51,23 @@
 		}
 		return selectedTitle;
 	}
+	
+	function getLastMsg(){
+		var messages = document.querySelectorAll('.msg');
+		var pos = messages.length-1;
+		
+		while (messages[pos] && messages[pos].classList.contains('msg-system')){
+			pos--;
+			if (pos <= -1){
+				return false;
+			}
+		}
+		if (messages[pos]){
+			return messages[pos].querySelector('.emojitext').innerText;
+		} else {
+			return false;
+		}
+	}
 
     // Call the main function again
     const goAgain = (fn, sec) => {
@@ -93,8 +111,14 @@
     // Send a message
     const sendMessage = (chat, message, cb) => {
         //avoid duplicate sending
-        const title = chat.querySelector('.emojitext').title
-        ignoreLastMsg[title] = message
+        var title;
+        
+        if (chat){
+			title = chat.querySelector('.emojitext').title
+		} else {
+			title = getSelectedTitle();
+		}
+        ignoreLastMsg[title] = message;
 
         //add text into input field
         document.querySelector('.pluggable-input-body').innerHTML = message.replace(/  /gm,'')
@@ -117,22 +141,49 @@
         // get next unread chat
         const chats = _chats || document.querySelectorAll('.unread.chat')
         const chat = chats[cnt]
-
-        if (chats.length == 0 || !chat) {
-            console.log(new Date(), 'nothing to do now... (1)', chats.length, chat)
-            return goAgain(start, 3)
+        
+        var processLastMsgOnChat = false;
+        var lastMsg;
+        
+        if (!lastMessageOnChat){
+			if (false === (lastMessageOnChat = getLastMsg())){
+				lastMessageOnChat = true; //to prevent the first "if" to go true everytime
+			} else {
+				lastMsg = lastMessageOnChat;
+			}
+		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false){
+			console.log(lastMessageOnChat+" != "+getLastMsg());
+			lastMessageOnChat = lastMsg = getLastMsg();
+			processLastMsgOnChat = true;
+		}
+        
+        if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
+            console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
+            return goAgain(start, 3);
         }
-
+        
+        console.log('called');
+        
         // get infos
-        const title = chat.querySelector('.emojitext').title + ''
-        const lastMsg = (chat.querySelectorAll('.emojitext')[1] || { innerText: '' }).innerText //.last-msg returns null when some user is typing a message to me
-
+        console.log('called1.2');
+        var title;
+        if (!processLastMsgOnChat){
+			title = chat.querySelector('.emojitext').title + '';
+			lastMsg = (chat.querySelectorAll('.emojitext')[1] || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
+		} else {
+			title = getSelectedTitle();
+		}
+		console.log('called1.1');
+		console.log(title);
+		console.log(ignoreLastMsg);
         // avoid sending duplicate messaegs
-        if ((ignoreLastMsg[title]) == lastMsg) {
+        if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
             console.log(new Date(), 'nothing to do now... (2)', title, lastMsg)
             return goAgain(() => { start(chats, cnt + 1) }, 0.1)
-        }
-
+        } else {
+			console.log('shit');
+		}
+		console.log('called2');
         // what to answer back?
         let sendText
 
@@ -142,16 +193,19 @@
 
                 1. *@TIME*
                 2. *@JOKE*`
-
+		console.log('called3');
         if (lastMsg.toUpperCase().indexOf('@TIME') > -1)
             sendText = `
                 Don't you have a clock, dude?
 
                 *${new Date()}*`
-
+		console.log('called3');
         if (lastMsg.toUpperCase().indexOf('@JOKE') > -1)
             sendText = jokeList[rand(jokeList.length - 1)]
-
+		
+		console.log(sendText);
+		console.log('SENDTEXT');
+		
         // that's sad, there's not to send back...
         if (!sendText) {
             ignoreLastMsg[title] = lastMsg
@@ -162,11 +216,17 @@
         console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg)
 
         // select chat and send message
-        selectChat(chat, () => {
-            sendMessage(chat, sendText.trim(), () => {
-                goAgain(() => { start(chats, cnt + 1) }, 0.1)
-            })
-        })
+        if (!processLastMsgOnChat){
+			selectChat(chat, () => {
+				sendMessage(chat, sendText.trim(), () => {
+					goAgain(() => { start(chats, cnt + 1) }, 0.1)
+				});
+			})
+		} else {
+			sendMessage(null, sendText.trim(), () => {
+				goAgain(() => { start(chats, cnt + 1) }, 0.1)
+			});
+		}
     }
 
     start()
