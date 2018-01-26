@@ -61,17 +61,18 @@
 
     // Dispath an event (of click, por instance)
     const eventFire = (el, etype) => {
-        let evObj = document.createEvent('Events')
-        evObj.initEvent(etype, true, false)
-        el.dispatchEvent(evObj)
+		var evt = document.createEvent("MouseEvents");
+		evt.initMouseEvent(etype, true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+		el.dispatchEvent(evt);
     }
 
     // Select a chat to show the main box
     const selectChat = (chat, cb) => {
-        const title = chat.querySelector('.emojitext').title
-        eventFire(chat, 'mousedown')
+        const title = chat.querySelector('.emojitext').title;
+        eventFire(chat, 'mousedown');
 
-        if (!cb) return
+        if (!cb) return;
 
         const loopFewTimes = () => {
             setTimeout(() => {
@@ -83,7 +84,7 @@
                 }
 
                 return cb()
-            }, 1)
+            }, 300)
         }
 
         loopFewTimes()
