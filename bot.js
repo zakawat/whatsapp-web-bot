@@ -162,10 +162,7 @@
             return goAgain(start, 3);
         }
         
-        console.log('called');
-        
         // get infos
-        console.log('called1.2');
         var title;
         if (!processLastMsgOnChat){
 			title = chat.querySelector('.emojitext').title + '';
@@ -173,17 +170,12 @@
 		} else {
 			title = getSelectedTitle();
 		}
-		console.log('called1.1');
-		console.log(title);
-		console.log(ignoreLastMsg);
         // avoid sending duplicate messaegs
         if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
             console.log(new Date(), 'nothing to do now... (2)', title, lastMsg)
             return goAgain(() => { start(chats, cnt + 1) }, 0.1)
-        } else {
-			console.log('shit');
-		}
-		console.log('called2');
+        }
+        
         // what to answer back?
         let sendText
 
@@ -199,12 +191,9 @@
                 Don't you have a clock, dude?
 
                 *${new Date()}*`
-		console.log('called3');
+		
         if (lastMsg.toUpperCase().indexOf('@JOKE') > -1)
             sendText = jokeList[rand(jokeList.length - 1)]
-		
-		console.log(sendText);
-		console.log('SENDTEXT');
 		
         // that's sad, there's not to send back...
         if (!sendText) {
