@@ -5,7 +5,6 @@
 	//const whitelist = ['Fotos salvass', 'Teste ignore']
 	var lastMessageOnChat = false;
 	var ignoreLastMsg = {};
-	var sendingMessage = false;
 
 	const jokeList = [
 		`
