@@ -163,31 +163,25 @@
 		var processLastMsgOnChat = false;
 		var lastMsg;
 		
-		//if (!didYouSendLastMsg()){
-			if (!lastMessageOnChat){
-				if (false === (lastMessageOnChat = getLastMsg())){
-					lastMessageOnChat = true; //to prevent the first "if" to go true everytime
-				} else {
-					lastMsg = lastMessageOnChat;
-				}
-			} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false && !didYouSendLastMsg()){
-				lastMessageOnChat = lastMsg = getLastMsg();
-				processLastMsgOnChat = true;
+		if (!lastMessageOnChat){
+			if (false === (lastMessageOnChat = getLastMsg())){
+				lastMessageOnChat = true; //to prevent the first "if" to go true everytime
+			} else {
+				lastMsg = lastMessageOnChat;
 			}
-			
-			if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
-				console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
-				return goAgain(start, 3);
-			}
-		//}
+		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false && !didYouSendLastMsg()){
+			lastMessageOnChat = lastMsg = getLastMsg();
+			processLastMsgOnChat = true;
+		}
+		
+		if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
+			console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
+			return goAgain(start, 3);
+		}
 
 		// get infos
 		var title;
 		if (!processLastMsgOnChat){
-			/*if (!chat){
-				console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
-				return goAgain(() => { start(chats, cnt + 1) }, 0.1);
-			}*/
 			title = chat.querySelector('.emojitext').title + '';
 			lastMsg = (chat.querySelectorAll('.emojitext.ellipsify')[1] || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
 		} else {
