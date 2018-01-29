@@ -1,44 +1,45 @@
 (() => {
-    //
-    // GLOBAL VARS AND CONFIGS
-    //
-    //const whitelist = ['Fotos salvass', 'Teste ignore']
-    const ignoreLastMsg = {}
+	//
+	// GLOBAL VARS AND CONFIGS
+	//
+	//const whitelist = ['Fotos salvass', 'Teste ignore']
+	var lastMessageOnChat = false;
+	var ignoreLastMsg = {}
 
-    const jokeList = [
-        `
-        Husband and Wife had a Fight.
-        Wife called Mom : He fought with me again,
-        I am coming to you.
-        Mom : No beta, he must pay for his mistake,
-        I am comming to stay with U!`,
+	const jokeList = [
+		`
+		Husband and Wife had a Fight.
+		Wife called Mom : He fought with me again,
+		I am coming to you.
+		Mom : No beta, he must pay for his mistake,
+		I am comming to stay with U!`,
 
-        `
-        Husband: Darling, years ago u had a figure like Coke bottle.
-        Wife: Yes darling I still do, only difference is earlier it was 300ml now it's 1.5 ltr.`,
+		`
+		Husband: Darling, years ago u had a figure like Coke bottle.
+		Wife: Yes darling I still do, only difference is earlier it was 300ml now it's 1.5 ltr.`,
 
-        `
-        God created the earth, 
-        God created the woods, 
-        God created you too, 
-        But then, even God makes mistakes sometimes!`,
+		`
+		God created the earth, 
+		God created the woods, 
+		God created you too, 
+		But then, even God makes mistakes sometimes!`,
 
-        `
-        What is a difference between a Kiss, a Car and a Monkey? 
-        A kiss is so dear, a car is too dear and a monkey is U dear.`
-    ]
+		`
+		What is a difference between a Kiss, a Car and a Monkey? 
+		A kiss is so dear, a car is too dear and a monkey is U dear.`
+	]
 
 
-    //
-    // FUNCTIONS
-    //
+	//
+	// FUNCTIONS
+	//
 
-    // Get random value between a range
-    function rand(high, low = 0) {
-        return Math.floor(Math.random() * (high - low + 1) + low);
-    }
+	// Get random value between a range
+	function rand(high, low = 0) {
+		return Math.floor(Math.random() * (high - low + 1) + low);
+	}
     
-    function getSelectedTitle(){
+	function getSelectedTitle(){
 		var chats = document.querySelectorAll('.chat-drag-cover');
 		var selectedTitle;
 		for (var i = 0; i < chats.length; i++){
@@ -50,124 +51,172 @@
 		}
 		return selectedTitle;
 	}
+	
+	function getLastMsg(){
+		var messages = document.querySelectorAll('.msg');
+		var pos = messages.length-1;
+		
+		while (messages[pos] && (messages[pos].classList.contains('msg-system') || messages[pos].querySelector('.message-out'))){
+			pos--;
+			if (pos <= -1){
+				return false;
+			}
+		}
+		if (messages[pos]){
+			return messages[pos].querySelector('.emojitext.selectable-text').innerText;
+		} else {
+			return false;
+		}
+	}
 
-    // Call the main function again
-    const goAgain = (fn, sec) => {
-        // const chat = document.querySelector('div.chat:not(.unread)')
-        // selectChat(chat)
+	// Call the main function again
+	const goAgain = (fn, sec) => {
+		// const chat = document.querySelector('div.chat:not(.unread)')
+		// selectChat(chat)
+		setTimeout(fn, sec * 1000)
+	}
 
-        setTimeout(fn, sec * 1000)
-    }
-
-    // Dispath an event (of click, por instance)
-    const eventFire = (el, etype) => {
+	// Dispath an event (of click, por instance)
+	const eventFire = (el, etype) => {
 		var evt = document.createEvent("MouseEvents");
 		evt.initMouseEvent(etype, true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
 		el.dispatchEvent(evt);
-    }
+	}
 
-    // Select a chat to show the main box
-    const selectChat = (chat, cb) => {
-        const title = chat.querySelector('.emojitext').title;
-        eventFire(chat, 'mousedown');
+	// Select a chat to show the main box
+	const selectChat = (chat, cb) => {
+		const title = chat.querySelector('.emojitext').title;
+		eventFire(chat, 'mousedown');
 
-        if (!cb) return;
+		if (!cb) return;
 
-        const loopFewTimes = () => {
-            setTimeout(() => {
-                const titleMain = getSelectedTitle();
+		const loopFewTimes = () => {
+			setTimeout(() => {
+				const titleMain = getSelectedTitle();
 
-                if (titleMain != title) {
-                    console.log('not yet')
-                    return loopFewTimes()
-                }
+				if (titleMain != title){
+					console.log('not yet');
+					return loopFewTimes();
+				}
 
-                return cb()
-            }, 300)
-        }
+				return cb();
+			}, 300);
+		}
 
-        loopFewTimes()
-    }
+		loopFewTimes();
+	}
 
-    // Send a message
-    const sendMessage = (chat, message, cb) => {
-        //avoid duplicate sending
-        const title = chat.querySelector('.emojitext').title
-        ignoreLastMsg[title] = message
+	// Send a message
+	const sendMessage = (chat, message, cb) => {
+		//avoid duplicate sending
+		var title;
 
-        //add text into input field
-        document.querySelector('.pluggable-input-body').innerHTML = message.replace(/  /gm,'')
+		if (chat){
+			title = chat.querySelector('.emojitext').title;
+		} else {
+			title = getSelectedTitle();
+		}
+		ignoreLastMsg[title] = message;
 
-        //Force refresh
-        event = document.createEvent("UIEvents");
-        event.initUIEvent("input", true, true, window, 1)
-        document.querySelector('.pluggable-input-body').dispatchEvent(event)
+		//add text into input field
+		document.querySelector('.pluggable-input-body').innerHTML = message.replace(/  /gm,'');
 
-        //Click at Send Button
-        eventFire(document.querySelector('.compose-btn-send'), 'click')
+		//Force refresh
+		event = document.createEvent("UIEvents");
+		event.initUIEvent("input", true, true, window, 1);
+		document.querySelector('.pluggable-input-body').dispatchEvent(event);
 
-        cb()
-    }
+		//Click at Send Button
+		eventFire(document.querySelector('.compose-btn-send'), 'click');
 
-    //
-    // MAIN LOGIC
-    //
-    const start = (_chats, cnt = 0) => {
-        // get next unread chat
-        const chats = _chats || document.querySelectorAll('.unread.chat')
-        const chat = chats[cnt]
+		cb();
+	}
 
-        if (chats.length == 0 || !chat) {
-            console.log(new Date(), 'nothing to do now... (1)', chats.length, chat)
-            return goAgain(start, 3)
-        }
+	//
+	// MAIN LOGIC
+	//
+	const start = (_chats, cnt = 0) => {
+		// get next unread chat
+		const chats = _chats || document.querySelectorAll('.unread.chat');
+		const chat = chats[cnt];
 
-        // get infos
-        const title = chat.querySelector('.emojitext').title + ''
-        const lastMsg = (chat.querySelectorAll('.emojitext')[1] || { innerText: '' }).innerText //.last-msg returns null when some user is typing a message to me
+		var processLastMsgOnChat = false;
+		var lastMsg;
 
-        // avoid sending duplicate messaegs
-        if ((ignoreLastMsg[title]) == lastMsg) {
-            console.log(new Date(), 'nothing to do now... (2)', title, lastMsg)
-            return goAgain(() => { start(chats, cnt + 1) }, 0.1)
-        }
+		if (!lastMessageOnChat){
+			if (false === (lastMessageOnChat = getLastMsg())){
+				lastMessageOnChat = true; //to prevent the first "if" to go true everytime
+			} else {
+				lastMsg = lastMessageOnChat;
+			}
+		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false){
+			console.log(lastMessageOnChat+" != "+getLastMsg());
+			lastMessageOnChat = lastMsg = getLastMsg();
+			processLastMsgOnChat = true;
+		}
+		
+		if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
+			console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
+			return goAgain(start, 3);
+		}
 
-        // what to answer back?
-        let sendText
+		// get infos
+		var title;
+		if (!processLastMsgOnChat){
+			title = chat.querySelector('.emojitext').title + '';
+			lastMsg = (chat.querySelectorAll('.emojitext.ellipsify')[1] || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
+		} else {
+			title = getSelectedTitle();
+		}
+		// avoid sending duplicate messaegs
+		if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
+			console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
+			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
+		}
 
-        if (lastMsg.toUpperCase().indexOf('@HELP') > -1)
-            sendText = `
-                Cool ${title}! Some commands that you can send me:
+		// what to answer back?
+		let sendText
 
-                1. *@TIME*
-                2. *@JOKE*`
+		if (lastMsg.toUpperCase().indexOf('@HELP') > -1){
+			sendText = `
+				Cool ${title}! Some commands that you can send me:
 
-        if (lastMsg.toUpperCase().indexOf('@TIME') > -1)
-            sendText = `
-                Don't you have a clock, dude?
+				1. *@TIME*
+				2. *@JOKE*`
+		}
 
-                *${new Date()}*`
+		if (lastMsg.toUpperCase().indexOf('@TIME') > -1){
+			sendText = `
+				Don't you have a clock, dude?
 
-        if (lastMsg.toUpperCase().indexOf('@JOKE') > -1)
-            sendText = jokeList[rand(jokeList.length - 1)]
+				*${new Date()}*`
+		}
 
-        // that's sad, there's not to send back...
-        if (!sendText) {
-            ignoreLastMsg[title] = lastMsg
-            console.log(new Date(), 'new message ignored -> ', title, lastMsg)
-            return goAgain(() => { start(chats, cnt + 1) }, 0.1)
-        }
+		if (lastMsg.toUpperCase().indexOf('@JOKE') > -1){
+			sendText = jokeList[rand(jokeList.length - 1)];
+		}
+		
+		// that's sad, there's not to send back...
+		if (!sendText) {
+			ignoreLastMsg[title] = lastMsg;
+			console.log(new Date(), 'new message ignored -> ', title, lastMsg);
+			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
+		}
 
-        console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg)
+		console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg);
 
-        // select chat and send message
-        selectChat(chat, () => {
-            sendMessage(chat, sendText.trim(), () => {
-                goAgain(() => { start(chats, cnt + 1) }, 0.1)
-            })
-        })
-    }
-
-    start()
+		// select chat and send message
+		if (!processLastMsgOnChat){
+			selectChat(chat, () => {
+				sendMessage(chat, sendText.trim(), () => {
+					goAgain(() => { start(chats, cnt + 1) }, 0.1);
+				});
+			})
+		} else {
+			sendMessage(null, sendText.trim(), () => {
+				goAgain(() => { start(chats, cnt + 1) }, 0.1);
+			});
+		}
+	}
+	start();
 })()
