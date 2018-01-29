@@ -4,7 +4,7 @@
 	//
 	//const whitelist = ['Fotos salvass', 'Teste ignore']
 	var lastMessageOnChat = false;
-	var ignoreLastMsg = {}
+	var ignoreLastMsg = {};
 
 	const jokeList = [
 		`
@@ -62,11 +62,30 @@
 				return false;
 			}
 		}
-		if (messages[pos]){
+		if (messages[pos] && messages[pos].querySelector('.emojitext.selectable-text')){
 			return messages[pos].querySelector('.emojitext.selectable-text').innerText;
 		} else {
 			return false;
 		}
+	}
+	
+	function didYouSendLastMsg(){
+		var messages = document.querySelectorAll('.msg');
+		if (messages.length <= 0){
+			return false;
+		}
+		var pos = messages.length-1;
+		
+		while (messages[pos] && messages[pos].classList.contains('msg-system')){
+			pos--;
+			if (pos <= -1){
+				return -1;
+			}
+		}
+		if (messages[pos].querySelector('.message-out')){
+			return true;
+		}
+		return false;
 	}
 
 	// Call the main function again
@@ -142,15 +161,14 @@
 
 		var processLastMsgOnChat = false;
 		var lastMsg;
-
+		
 		if (!lastMessageOnChat){
 			if (false === (lastMessageOnChat = getLastMsg())){
 				lastMessageOnChat = true; //to prevent the first "if" to go true everytime
 			} else {
 				lastMsg = lastMessageOnChat;
 			}
-		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false){
-			console.log(lastMessageOnChat+" != "+getLastMsg());
+		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false && !didYouSendLastMsg()){
 			lastMessageOnChat = lastMsg = getLastMsg();
 			processLastMsgOnChat = true;
 		}
