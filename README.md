@@ -71,3 +71,5 @@ Feel free to fix and PR it. I will probably not touch in this public repo anymor
 # -
 
 Author: Bruno Kilian | skype bruno.kilian
+
+Co-Author: [Nelson Galdeman](https://github.com/NelsonGaldeman)
