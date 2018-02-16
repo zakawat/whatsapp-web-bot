@@ -62,8 +62,8 @@
 				return false;
 			}
 		}
-		if (messages[pos] && messages[pos].querySelector('.emojitext.selectable-text')){
-			return messages[pos].querySelector('.emojitext.selectable-text').innerText;
+		if (messages[pos] && messages[pos].querySelector('.selectable-text')){
+			return messages[pos].querySelector('.selectable-text').innerText;
 		} else {
 			return false;
 		}
