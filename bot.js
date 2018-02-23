@@ -2,9 +2,16 @@
 	//
 	// GLOBAL VARS AND CONFIGS
 	//
-	//const whitelist = ['Fotos salvass', 'Teste ignore']
 	var lastMessageOnChat = false;
 	var ignoreLastMsg = {};
+	var elementConfig = {
+		"chats": [1, 0, 5, 2, 0, 3, 0, 0, 0],
+		"chat_icons": [0, 0, 1, 1, 1, 0],
+		"chat_title": [0, 0, 1, 0, 0, 0],
+		"chat_lastmsg": [0, 0, 1, 1, 0, 0],
+		"chat_active": [0, 0],
+		"selected_title": [1, 0, 5, 3, 0, 1, 1, 0, 0, 0]
+	};
 
 	const jokeList = [
 		`
@@ -38,18 +45,24 @@
 	function rand(high, low = 0) {
 		return Math.floor(Math.random() * (high - low + 1) + low);
 	}
-    
-	function getSelectedTitle(){
-		var chats = document.querySelectorAll('.chat-drag-cover');
-		var selectedTitle;
-		for (var i = 0; i < chats.length; i++){
-			if (chats[i]){
-				if (chats[i].querySelector('.active')){
-					selectedTitle = chats[i].querySelector('.emojitext').title;
-				}
-			}
+	
+	function getElement(id, parent){
+		if (!elementConfig[id]){
+			return false;
 		}
-		return selectedTitle;
+		var elem = !parent ? document.body : parent;
+		var elementArr = elementConfig[id];
+		for (var x in elementArr){
+			var pos = elementArr[x];
+			if (isNaN(pos*1)){ //dont know why, but for some reason after the last position it loops once again and "pos" is loaded with a function WTF. I got tired finding why and did this
+				continue;
+			}
+			if (!elem.childNodes[pos]){
+				return false;
+			}
+			elem = elem.childNodes[pos];
+		}
+		return elem;
 	}
 	
 	function getLastMsg(){
@@ -67,6 +80,32 @@
 		} else {
 			return false;
 		}
+	}
+	
+	function getUnreadChats(){
+		var unreadchats = [];
+		var chats = getElement("chats");
+		if (chats){
+			chats = chats.childNodes;
+			for (var i in chats){
+				if (!(chats[i] instanceof Element)){
+					continue;
+				}
+				var icons = getElement("chat_icons", chats[i]).childNodes;
+				if (!icons){
+					continue;
+				}
+				for (var j in icons){
+					if (icons[j] instanceof Element){
+						if (!(icons[j].childNodes[0].getAttribute('data-icon') == 'muted')){
+							unreadchats.push(chats[i]);
+							break;
+						}
+					}
+				}
+			}
+		}
+		return unreadchats;
 	}
 	
 	function didYouSendLastMsg(){
@@ -104,20 +143,16 @@
 
 	// Select a chat to show the main box
 	const selectChat = (chat, cb) => {
-		const title = chat.querySelector('.emojitext').title;
+		const title = getElement("chat_title",chat).title;
 		eventFire(chat, 'mousedown');
-
 		if (!cb) return;
-
 		const loopFewTimes = () => {
 			setTimeout(() => {
-				const titleMain = getSelectedTitle();
-
-				if (titleMain != title){
+				const titleMain = getElement("selected_title").title;
+				if (titleMain !== undefined && titleMain != title){
 					console.log('not yet');
 					return loopFewTimes();
 				}
-
 				return cb();
 			}, 300);
 		}
@@ -131,9 +166,9 @@
 		var title;
 
 		if (chat){
-			title = chat.querySelector('.emojitext').title;
+			title = getElement("chat_title",chat).title;
 		} else {
-			title = getSelectedTitle();
+			title = getElement("selected_title").title;
 		}
 		ignoreLastMsg[title] = message;
 
@@ -146,7 +181,7 @@
 		document.querySelector('.pluggable-input-body').dispatchEvent(event);
 
 		//Click at Send Button
-		eventFire(document.querySelector('.compose-btn-send'), 'click');
+		eventFire(document.querySelector('#main span[data-icon="send"]'), 'click');
 
 		cb();
 	}
@@ -156,9 +191,9 @@
 	//
 	const start = (_chats, cnt = 0) => {
 		// get next unread chat
-		const chats = _chats || document.querySelectorAll('.unread.chat');
+		const chats = _chats || getUnreadChats();
 		const chat = chats[cnt];
-
+		
 		var processLastMsgOnChat = false;
 		var lastMsg;
 		
@@ -181,10 +216,10 @@
 		// get infos
 		var title;
 		if (!processLastMsgOnChat){
-			title = chat.querySelector('.emojitext').title + '';
-			lastMsg = (chat.querySelectorAll('.emojitext.ellipsify')[1] || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
+			title = getElement("chat_title",chat).title + '';
+			lastMsg = (getElement("chat_lastmsg", chat) || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
 		} else {
-			title = getSelectedTitle();
+			title = getElement("selected_title").title;
 		}
 		// avoid sending duplicate messaegs
 		if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
