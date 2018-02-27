@@ -97,7 +97,7 @@
 				}
 				for (var j in icons){
 					if (icons[j] instanceof Element){
-						if (!(icons[j].childNodes[0].getAttribute('data-icon') == 'muted')){
+						if (!(icons[j].childNodes[0].getAttribute('data-icon') == 'muted' || icons[j].childNodes[0].getAttribute('data-icon') == 'pinned')){
 							unreadchats.push(chats[i]);
 							break;
 						}
