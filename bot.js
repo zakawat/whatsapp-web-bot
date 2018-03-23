@@ -172,7 +172,7 @@
 		}
 		ignoreLastMsg[title] = message;
 		
-		messageBox = document.querySelectorAll("[spellcheck='true']")[0];
+		messageBox = document.querySelectorAll("[contenteditable='true']")[0];
 
 		//add text into input field
 		messageBox.innerHTML = message.replace(/  /gm,'');
@@ -261,7 +261,12 @@
 		console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg);
 
 		// select chat and send message
-		if (!processLastMsgOnChat){
+		var send = { sendMessage(!processLastMsgOnChat ? chat : null, sendText.trim(), () => {
+				goAgain(() => { start(chats, cnt + 1) }, 0.1);
+			});
+		};
+		selectChat(chat, send);
+		/*if (!processLastMsgOnChat){
 			selectChat(chat, () => {
 				sendMessage(chat, sendText.trim(), () => {
 					goAgain(() => { start(chats, cnt + 1) }, 0.1);
@@ -271,7 +276,7 @@
 			sendMessage(null, sendText.trim(), () => {
 				goAgain(() => { start(chats, cnt + 1) }, 0.1);
 			});
-		}
+		}*/
 	}
 	start();
 })()
