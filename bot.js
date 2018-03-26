@@ -261,12 +261,7 @@
 		console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg);
 
 		// select chat and send message
-		var send = { sendMessage(!processLastMsgOnChat ? chat : null, sendText.trim(), () => {
-				goAgain(() => { start(chats, cnt + 1) }, 0.1);
-			});
-		};
-		selectChat(chat, send);
-		/*if (!processLastMsgOnChat){
+		if (!processLastMsgOnChat){
 			selectChat(chat, () => {
 				sendMessage(chat, sendText.trim(), () => {
 					goAgain(() => { start(chats, cnt + 1) }, 0.1);
@@ -276,7 +271,7 @@
 			sendMessage(null, sendText.trim(), () => {
 				goAgain(() => { start(chats, cnt + 1) }, 0.1);
 			});
-		}*/
+		}
 	}
 	start();
 })()
