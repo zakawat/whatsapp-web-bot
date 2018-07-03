@@ -52,16 +52,12 @@
 		}
 		var elem = !parent ? document.body : parent;
 		var elementArr = elementConfig[id];
-		for (var x in elementArr){
-			var pos = elementArr[x];
-			if (isNaN(pos*1)){ //dont know why, but for some reason after the last position it loops once again and "pos" is loaded with a function WTF. I got tired finding why and did this
-				continue;
-			}
+		elementArr.forEach(function(pos) {
 			if (!elem.childNodes[pos]){
 				return false;
 			}
 			elem = elem.childNodes[pos];
-		}
+		});
 		return elem;
 	}
 	
