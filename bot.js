@@ -72,7 +72,7 @@
 			}
 		}
 		if (messages[pos] && messages[pos].querySelector('.selectable-text')){
-			return messages[pos].querySelector('.selectable-text').innerText;
+			return messages[pos].querySelector('.selectable-text').innerText.trim();
 		} else {
 			return false;
 		}
@@ -215,7 +215,7 @@
 		var title;
 		if (!processLastMsgOnChat){
 			title = getElement("chat_title",chat).title + '';
-			lastMsg = (getElement("chat_lastmsg", chat) || { innerText: '' }).innerText; //.last-msg returns null when some user is typing a message to me
+			lastMsg = (getElement("chat_lastmsg", chat) || { innerText: '' }).innerText.trim(); //.last-msg returns null when some user is typing a message to me
 		} else {
 			title = getElement("selected_title").title;
 		}
