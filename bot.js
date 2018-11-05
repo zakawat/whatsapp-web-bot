@@ -65,7 +65,7 @@
 		var messages = document.querySelectorAll('.msg');
 		var pos = messages.length-1;
 		
-		while (messages[pos] && (messages[pos].classList.contains('msg-system') || messages[pos].querySelector('.message-out'))){
+		while (messages[pos] && (messages[pos].classList.contains('msg-system') || messages[pos].querySelector('.message-in'))){
 			pos--;
 			if (pos <= -1){
 				return false;
@@ -260,12 +260,12 @@
 		if (!processLastMsgOnChat){
 			selectChat(chat, () => {
 				sendMessage(chat, sendText.trim(), () => {
-					goAgain(() => { start(chats, cnt + 1) }, 0.1);
+					goAgain(() => { start(chats, cnt + 1) }, 1);
 				});
 			})
 		} else {
 			sendMessage(null, sendText.trim(), () => {
-				goAgain(() => { start(chats, cnt + 1) }, 0.1);
+				goAgain(() => { start(chats, cnt + 1) }, 1);
 			});
 		}
 	}
