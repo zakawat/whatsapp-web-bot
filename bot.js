@@ -230,20 +230,21 @@
 
 		//console.log(lastMsg);
 		
-/*
-		console.log("Sending Request !!");
-		fetch("http://localhost/Tajrubas/testServerOne/bot.php") // Call the fetch function passing the url of the API as a parameter
-			.then(function(data) {
-				console.log(data);
-			})
-			.catch(function(data) {
-				console.log(data);
-			});
-  
-			Implemeted a RiveScript AI but the CSP won’t allow me to send the request to localhost !! 😭
-			
 
-*/		
+		console.log("Sending Request !!");
+		var request = new XMLHttpRequest();
+		request.open('GET', 'https://one.me/bot.php', false);  // `false` makes the request synchronous
+		request.send(null);
+		
+		if (request.status === 200) {
+		  console.log(JSON.parse(request.responseText));
+		}
+  
+			//Implemeted a RiveScript AI but the CSP won’t allow me to send the request to localhost !! 😭
+			//https://jsonplaceholder.typicode.com/todos/1
+			//https://one.me/bot.php
+
+		
 
 
 
