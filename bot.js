@@ -1,7 +1,8 @@
 (() => {
 	//
 	// GLOBAL VARS AND CONFIGS
-	//
+    //
+    const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	var lastMessageOnChat = false;
 	var ignoreLastMsg = {};
 	var elementConfig = {
@@ -13,27 +14,24 @@
 		"selected_title": [1, 0, 5, 3, 0, 1, 1, 0, 0, 0, 0]
 	};
 
-	const jokeList = [
-		`
-		Husband and Wife had a Fight.
-		Wife called Mom : He fought with me again,
-		I am coming to you.
-		Mom : No beta, he must pay for his mistake,
-		I am comming to stay with U!`,
+	const funFactsList = [
+		`Oxford University Was Founded Before Aztec Civilization Began !!`,
 
-		`
-		Husband: Darling, years ago u had a figure like Coke bottle.
-		Wife: Yes darling I still do, only difference is earlier it was 300ml now it's 1.5 ltr.`,
+		`Neil Armstrong Had to Go Through U.S. Customs after Returning from the Moon`,
 
-		`
-		God created the earth, 
-		God created the woods, 
-		God created you too, 
-		But then, even God makes mistakes sometimes!`,
+		`Saudi Arabia Imports Camels from Australia`,
 
-		`
-		What is a difference between a Kiss, a Car and a Monkey? 
-		A kiss is so dear, a car is too dear and a monkey is U dear.`
+        `The Current U.S. Flag Was Designed by a 17-Year-Old for a School Project.`,
+        
+        `If Cars Drove Upwards You Could Drive to Space in an Hour !!`,
+
+        `Firefighters use wetting agents to make water wetter.`,
+
+        `The longest English word is 189,819 letters long.`,
+        
+        `Kleenex tissues were originally intended for gas masks`
+
+        
 	]
 
 
@@ -127,7 +125,7 @@
 	const goAgain = (fn, sec) => {
 		// const chat = document.querySelector('div.chat:not(.unread)')
 		// selectChat(chat)
-		setTimeout(fn, sec * 1000)
+		setTimeout(fn, sec * 500)
 	}
 
 	// Dispath an event (of click, por instance)
@@ -207,7 +205,7 @@
 		}
 		
 		if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
-			console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
+			//console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
 			return goAgain(start, 3);
 		}
 
@@ -221,36 +219,59 @@
 		}
 		// avoid sending duplicate messaegs
 		if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
-			console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
+			//console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
 			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
 		}
 
 		// what to answer back?
-		let sendText
+        let sendText
+        var regex = /@[A-Z|a-z|_]*$/;
+        let botName = "*Zaki’s BOT:*"
 
-		if (lastMsg.toUpperCase().indexOf('@HELP') > -1){
-			sendText = `
-				Cool ${title}! Some commands that you can send me:
+        console.log(lastMsg);
 
-				1. *@TIME*
-				2. *@JOKE*`
+		if (lastMsg.toUpperCase().endsWith('@HELP')){
+            if (title == null) {
+                title = ``;
+            }else { 
+                title = `“${title}”`; 
+            }
+            sendText = `${botName} Hi ${title}!! I am a simple chat bot !!
+            
+            Some commands that you can send me are as follow:
+            *@TIME*
+            *@FACT* ⠀⠀  `
 		}
 
-		if (lastMsg.toUpperCase().indexOf('@TIME') > -1){
-			sendText = `
-				Don't you have a clock, dude?
-
-				*${new Date()}*`
+		else if (lastMsg.toUpperCase().endsWith('@TIME')){
+            let current_datetime = new Date();
+            sendText = `${botName} Well, the current time is:
+            *${months[current_datetime.getMonth()]} ${current_datetime.getDate()}, ${current_datetime.getFullYear()} - ${current_datetime.getHours()}:${current_datetime.getMinutes()<10?'0':''}${current_datetime.getMinutes()} PST*`
 		}
 
-		if (lastMsg.toUpperCase().indexOf('@JOKE') > -1){
-			sendText = jokeList[rand(jokeList.length - 1)];
-		}
+		else if (lastMsg.toUpperCase().endsWith('@FACT')){
+			sendText = `${botName} ${funFactsList[rand(funFactsList.length - 1)]}`;
+        }
+
+
+        
+
+        else if (regex.test(lastMsg)) {
+
+            var res = lastMsg.split('\n')[lastMsg.split('\n').length - 1];
+
+            sendText = `${botName} Did you tried to invoke me _(with the message of “${res}”)_ ??
+            I can only work with the following commands:
+            *@TIME*
+            *@FACT*
+            *@HELP* ⠀⠀⠀ `;
+        }
+
 		
 		// that's sad, there's not to send back...
 		if (!sendText) {
 			ignoreLastMsg[title] = lastMsg;
-			console.log(new Date(), 'new message ignored -> ', title, lastMsg);
+			//console.log(new Date(), 'new message ignored -> ', title, lastMsg);
 			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
 		}
 
