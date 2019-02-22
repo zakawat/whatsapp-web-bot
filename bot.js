@@ -228,7 +228,24 @@
         var regex = /@[A-Z|a-z|_]*$/;
         let botName = "*Zaki’s BOT:*"
 
-        console.log(lastMsg);
+		//console.log(lastMsg);
+		
+/*
+		console.log("Sending Request !!");
+		fetch("http://localhost/Tajrubas/testServerOne/bot.php") // Call the fetch function passing the url of the API as a parameter
+			.then(function(data) {
+				console.log(data);
+			})
+			.catch(function(data) {
+				console.log(data);
+			});
+  
+			Implemeted a RiveScript AI but the CSP won’t allow me to send the request to localhost !! 😭
+			
+
+*/		
+
+
 
 		if (lastMsg.toUpperCase().endsWith('@HELP')){
             if (title == null) {
