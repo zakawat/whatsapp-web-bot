@@ -4,6 +4,7 @@
     //
     const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	var lastMessageOnChat = false;
+	var convo_id = null;
 	var ignoreLastMsg = {};
 	var elementConfig = {
 		"chats": [1, 0, 5, 2, 0, 3, 0, 0, 0],
@@ -227,28 +228,47 @@
         let sendText
         var regex = /@[A-Z|a-z|_]*$/;
         let botName = "*Zaki’s BOT:*"
+		let aiURL = "https://localhost/Program-O/chatbot/conversation_start.php";
 
+		
 		//console.log(lastMsg);
 		
 
-		console.log("Sending Request !!");
-		var request = new XMLHttpRequest();
-		request.open('GET', 'https://one.me/bot.php', false);  // `false` makes the request synchronous
-		request.send(null);
 		
-		if (request.status === 200) {
-		  console.log(JSON.parse(request.responseText));
+		if(lastMsg.toUpperCase().startsWith('@BOT')){
+			var chk = lastMsg.split("@BOT")[1];
+			chk = chk.trim();
+			if( chk.length >= 1 ){ //means there is some text after @BOT
+				
+				aiURL += `?say=${chk}`;
+
+				if (convo_id != null) {
+					aiURL += `&convo_id=${convo_id}`;
+				}
+
+				var request = new XMLHttpRequest();
+				request.open('GET', aiURL, false);  // `false` makes the request synchronous
+				request.send(null);
+				
+				if (request.status === 200) {
+					var r = JSON.parse(request.responseText);
+					convo_id = r.convo_id;
+					sendText = `${botName} ${r.botsay}`;
+
+				}
+				else{
+					console.log(request);
+					sendText = `${botName} I am so sorry, the AI part of BOT is currently offline, please try again later !!`;
+				}
+			}else{
+				sendText = `${botName} Please type something...\nI can’t answer a question that not yet written !!` ;
+			}
 		}
-  
-			//Implemeted a RiveScript AI but the CSP won’t allow me to send the request to localhost !! 😭
-			//https://jsonplaceholder.typicode.com/todos/1
-			//https://one.me/bot.php
-
 		
 
 
 
-		if (lastMsg.toUpperCase().endsWith('@HELP')){
+		else if (lastMsg.toUpperCase().endsWith('@HELP')){
             if (title == null) {
                 title = ``;
             }else { 
