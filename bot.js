@@ -236,7 +236,8 @@
 
 		
 		if(lastMsg.toUpperCase().startsWith('@BOT')){
-			var chk = lastMsg.split("@BOT")[1];
+			console.log("@BOT is triggered");
+			var chk = lastMsg.toUpperCase().split("@BOT")[1];
 			chk = chk.trim();
 			if( chk.length >= 1 ){ //means there is some text after @BOT
 				
@@ -246,6 +247,7 @@
 					aiURL += `&convo_id=${convo_id}`;
 				}
 
+				console.log("Sending request....");
 				var request = new XMLHttpRequest();
 				request.open('GET', aiURL, false);  // `false` makes the request synchronous
 				request.send(null);
@@ -261,7 +263,8 @@
 					sendText = `${botName} I am so sorry, the AI part of BOT is currently offline, please try again later !!`;
 				}
 			}else{
-				sendText = `${botName} Please type something...\nI can’t answer a question that not yet written !!` ;
+				console.log("Else trigged.......")
+				sendText = `${botName} Please type something...\nI can’t answer a question that is not yet written !!` ;
 			}
 		}
 		
